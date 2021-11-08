@@ -1,0 +1,48 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Heroku test
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+     - main
+
+jobs:
+  login:
+    runs-on: ubuntu-latest   
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      # Runs a single command using the runners shell
+      - name: login to heroku
+        env:
+          HEROKU_KEY: ${{ secrets.HEROKU_KEY }}
+        run: heroku container:login
+        
+      - name: push
+        env:
+          HEROKU_KEY: ${{ secrets.HEROKU_KEY }}
+        run: heroku container:push -a ${{ secrets.HEROKU_APP }} web
+        
+      - name: Sleep
+        run: sleep 30
+        
+  loadtest:
+    name: k6 local test run
+    runs-on: ubuntu-latest
+    container: docker://loadimpact/k6:0.34.1
+    needs: [login]
+    
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        
+      - name: run k6 local test
+        uses: k6io/action@v0.1
+        with:
+          filename: webtour.js
+        env:
+          HOST: ${{ secrets.HEROKU_APP }}.herokuapp.com
+          PORT: 443
