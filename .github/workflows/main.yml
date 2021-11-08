@@ -18,19 +18,6 @@ jobs:
       env: 
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
       run: heroku container:login
-    
-    - name: Build and push
-      env:
-        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-      run: heroku container:push -a ${{ secrets.HEROKU_APP }} web 
-    
-    - name: Release
-      env:
-        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-      run: heroku container:release -a ${{ secrets.HEROKU_APP }} web
-    
-    - name: Sleep
-      run: sleep 30
 
   loadtest:
     name: k6 local test run 
@@ -46,6 +33,3 @@ jobs:
       uses: k6io/action@v0.1
       with:
         filename: webtour.js
-      env:
-        HOST: ${{ secrets.HEROKU_APP }}.herokuapp.com
-        PORT: 443
