@@ -39,9 +39,6 @@ jobs:
     needs: [build]
 
     steps:
-    - name: Echo port
-      run: echo "${{needs.build.outputs.output_port}}"
-
     - name: Checkout
       uses: actions/checkout@v1
     
