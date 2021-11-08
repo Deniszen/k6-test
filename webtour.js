@@ -1,8 +1,5 @@
 import http from 'k6/http';
 import { check, group } from "k6";
-import { randomItem } from 'https://jslib.k6.io/k6-utils/1.1.0/index.js';
-import { FormData } from 'https://jslib.k6.io/formdata/0.0.2/index.js';
-import { parseHTML } from 'k6/html';
 
 const PROTOCOL = 'http://';
 const BASE_URL = 'www.load-test.ru';
